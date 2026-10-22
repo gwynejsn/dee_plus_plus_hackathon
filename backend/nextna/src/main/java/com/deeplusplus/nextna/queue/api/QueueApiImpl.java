@@ -1,9 +1,9 @@
-package com.deeplusplus.NextNa.queue.api;
+package com.deeplusplus.nextna.queue.api;
 
-import com.deeplusplus.NextNa.queue.domain.QueueTicket;
-import com.deeplusplus.NextNa.queue.domain.QueueTicketRepository;
-import com.deeplusplus.NextNa.queue.domain.TicketId;
-import com.deeplusplus.NextNa.queue.domain.TicketNumber;
+import com.deeplusplus.nextna.queue.domain.QueueTicket;
+import com.deeplusplus.nextna.queue.domain.QueueTicketRepository;
+import com.deeplusplus.nextna.queue.domain.TicketId;
+import com.deeplusplus.nextna.queue.domain.TicketNumber;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

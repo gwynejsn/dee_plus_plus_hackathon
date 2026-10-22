@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.application;
+package com.deeplusplus.nextna.queue.application;
 
 import java.util.List;
 

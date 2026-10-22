@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.infrastructure;
+package com.deeplusplus.nextna.servicecatalog.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

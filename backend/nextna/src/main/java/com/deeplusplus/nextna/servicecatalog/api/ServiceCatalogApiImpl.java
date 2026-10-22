@@ -1,8 +1,8 @@
-package com.deeplusplus.NextNa.servicecatalog.api;
+package com.deeplusplus.nextna.servicecatalog.api;
 
-import com.deeplusplus.NextNa.servicecatalog.domain.CatalogService;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceId;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceRepository;
+import com.deeplusplus.nextna.servicecatalog.domain.CatalogService;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceId;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

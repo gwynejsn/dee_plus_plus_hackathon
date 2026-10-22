@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.servicecatalog.web;
+package com.deeplusplus.nextna.servicecatalog.web;
 
-import com.deeplusplus.NextNa.servicecatalog.application.CreateServiceCommand;
+import com.deeplusplus.nextna.servicecatalog.application.CreateServiceCommand;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

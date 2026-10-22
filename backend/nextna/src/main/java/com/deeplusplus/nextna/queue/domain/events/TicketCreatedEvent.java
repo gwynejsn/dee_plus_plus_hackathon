@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.domain.events;
+package com.deeplusplus.nextna.queue.domain.events;
 
 import java.time.Instant;
 

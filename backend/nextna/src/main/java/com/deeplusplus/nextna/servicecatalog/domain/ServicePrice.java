@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.domain;
+package com.deeplusplus.nextna.servicecatalog.domain;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

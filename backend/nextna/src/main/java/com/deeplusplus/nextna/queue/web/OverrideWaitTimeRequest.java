@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

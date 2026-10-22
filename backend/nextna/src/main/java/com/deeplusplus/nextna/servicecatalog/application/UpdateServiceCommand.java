@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.application;
+package com.deeplusplus.nextna.servicecatalog.application;
 
 import java.math.BigDecimal;
 

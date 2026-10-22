@@ -1,13 +1,13 @@
-package com.deeplusplus.NextNa.servicecatalog.application;
+package com.deeplusplus.nextna.servicecatalog.application;
 
-import com.deeplusplus.NextNa.servicecatalog.domain.CatalogService;
-import com.deeplusplus.NextNa.servicecatalog.domain.DurationMinutes;
-import com.deeplusplus.NextNa.servicecatalog.domain.InvalidServiceNameException;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceCategory;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceId;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceNotFoundException;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServicePrice;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceRepository;
+import com.deeplusplus.nextna.servicecatalog.domain.CatalogService;
+import com.deeplusplus.nextna.servicecatalog.domain.DurationMinutes;
+import com.deeplusplus.nextna.servicecatalog.domain.InvalidServiceNameException;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceCategory;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceId;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceNotFoundException;
+import com.deeplusplus.nextna.servicecatalog.domain.ServicePrice;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

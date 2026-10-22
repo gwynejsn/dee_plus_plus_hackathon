@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.infrastructure;
+package com.deeplusplus.nextna.queue.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

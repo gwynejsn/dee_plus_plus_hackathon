@@ -1,9 +1,9 @@
-package com.deeplusplus.NextNa.servicecatalog.web;
+package com.deeplusplus.nextna.servicecatalog.web;
 
-import com.deeplusplus.NextNa.servicecatalog.domain.InvalidDurationException;
-import com.deeplusplus.NextNa.servicecatalog.domain.InvalidServiceNameException;
-import com.deeplusplus.NextNa.servicecatalog.domain.InvalidServicePriceException;
-import com.deeplusplus.NextNa.servicecatalog.domain.ServiceNotFoundException;
+import com.deeplusplus.nextna.servicecatalog.domain.InvalidDurationException;
+import com.deeplusplus.nextna.servicecatalog.domain.InvalidServiceNameException;
+import com.deeplusplus.nextna.servicecatalog.domain.InvalidServicePriceException;
+import com.deeplusplus.nextna.servicecatalog.domain.ServiceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

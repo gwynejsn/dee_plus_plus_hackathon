@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.infrastructure;
+package com.deeplusplus.nextna.servicecatalog.infrastructure;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

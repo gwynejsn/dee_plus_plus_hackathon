@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.servicecatalog.web;
+package com.deeplusplus.nextna.servicecatalog.web;
 
-import com.deeplusplus.NextNa.servicecatalog.application.ServiceResponseDto;
+import com.deeplusplus.nextna.servicecatalog.application.ServiceResponseDto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
