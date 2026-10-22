@@ -1,14 +1,14 @@
 spring:
   application:
-    name: nextna
+    name: NextNa
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/nextna_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5123/nextna_db}
     username: ${SPRING_DATASOURCE_USERNAME:nextna}
     password: ${SPRING_DATASOURCE_PASSWORD:nextna_secret}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
