@@ -2,7 +2,7 @@ package com.deeplusplus.nextna.analytics.application;
 
 import com.deeplusplus.nextna.analytics.domain.TelemetryLog;
 import com.deeplusplus.nextna.analytics.domain.TelemetryLogRepository;
-import com.deeplusplus.nextna.queue.domain.events.TicketCompletedEvent;
+import com.deeplusplus.nextna.queue.api.TicketCompletedEvent;
 import com.deeplusplus.nextna.servicecatalog.api.ServiceCatalogApi;
 import com.deeplusplus.nextna.servicecatalog.api.ServiceDetailsDto;
 import org.springframework.modulith.events.ApplicationModuleListener;
