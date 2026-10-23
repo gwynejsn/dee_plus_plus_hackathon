@@ -8,6 +8,7 @@ import com.deeplusplus.nextna.queue.domain.TicketId;
 import com.deeplusplus.nextna.queue.domain.TicketNotFoundException;
 import com.deeplusplus.nextna.queue.domain.TicketNumber;
 import com.deeplusplus.nextna.queue.domain.TicketState;
+import com.deeplusplus.nextna.queue.api.TicketAlmostNextEvent;
 import com.deeplusplus.nextna.queue.api.TicketCalledEvent;
 import com.deeplusplus.nextna.queue.api.TicketCancelledEvent;
 import com.deeplusplus.nextna.queue.api.TicketCompletedEvent;
@@ -19,6 +20,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -242,7 +244,13 @@ public class QueueService {
         for (QueueTicket ticket : waiting) {
             if (!ticket.getId().value().equals(currentCalledId) && ticket.getState() == TicketState.WAITING) {
                 ticket.stageAlmostNext();
-                repository.save(ticket);
+                QueueTicket saved = repository.save(ticket);
+                eventPublisher.publishEvent(new TicketAlmostNextEvent(
+                        saved.getId().value(),
+                        saved.getTicketNumber().value(),
+                        saved.getCustomerName().value(),
+                        Instant.now()
+                ));
                 break;
             }
         }
