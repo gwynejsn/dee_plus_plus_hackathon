@@ -15,7 +15,7 @@ class OpenApiConfigTest {
 
         assertNotNull(openAPI);
         assertNotNull(openAPI.getInfo());
-        assertEquals("NextNa Virtual Buzzer & Queue Management API", openAPI.getInfo().getTitle());
+        assertEquals("NextNa Buzzer & Queue Management API", openAPI.getInfo().getTitle());
         assertEquals("v1.0.0", openAPI.getInfo().getVersion());
         assertNotNull(openAPI.getServers());
         assertEquals(1, openAPI.getServers().size());
