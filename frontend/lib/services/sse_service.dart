@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
 import '../config/api_config.dart';
 
-enum StreamConnectionState {
-  connecting,
-  connected,
-  disconnected,
-}
+enum StreamConnectionState { connecting, connected, disconnected }
 
 class SseEvent {
   final String type;
@@ -18,22 +16,12 @@ class SseEvent {
 }
 
 class SseSubscription {
-  final StreamSubscription? _subscription;
-  final http.Client? _client;
-  final Timer? _reconnectTimer;
+  final VoidCallback _cancelCallback;
 
-  SseSubscription({
-    StreamSubscription? subscription,
-    http.Client? client,
-    Timer? reconnectTimer,
-  })  : _subscription = subscription,
-        _client = client,
-        _reconnectTimer = reconnectTimer;
+  SseSubscription(this._cancelCallback);
 
   void cancel() {
-    _subscription?.cancel();
-    _client?.close();
-    _reconnectTimer?.cancel();
+    _cancelCallback();
   }
 }
 
@@ -139,10 +127,11 @@ class SseService {
 
     connect();
 
-    return SseSubscription(
-      subscription: subscription,
-      client: client,
-      reconnectTimer: reconnectTimer,
-    );
+    return SseSubscription(() {
+      isClosed = true;
+      reconnectTimer?.cancel();
+      subscription?.cancel();
+      client?.close();
+    });
   }
 }

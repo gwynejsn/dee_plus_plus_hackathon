@@ -1,11 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../config/soft_ui_theme.dart';
 import '../models/display_board_data.dart';
 import '../models/queue_summary.dart';
 import '../services/api_service.dart';
-import '../services/sse_service.dart';
 import '../services/sound_haptics_service.dart';
+import '../services/sse_service.dart';
 
 class DisplayScreen extends StatefulWidget {
   const DisplayScreen({super.key});
@@ -88,7 +90,8 @@ class _DisplayScreenState extends State<DisplayScreen> {
       onStateChange: (state) {
         if (!mounted) return;
         setState(() => _connectionState = state);
-        if (state == StreamConnectionState.disconnected && _pollingTimer == null) {
+        if (state == StreamConnectionState.disconnected &&
+            _pollingTimer == null) {
           _pollingTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
             try {
               final summary = await ApiService().getQueueSummary();
@@ -120,23 +123,33 @@ class _DisplayScreenState extends State<DisplayScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
-                children: [
-                  Text('📺', style: TextStyle(fontSize: 22)),
-                  SizedBox(width: 10),
-                  Text(
-                    'STORE QUEUE DISPLAY BOARD',
-                    style: TextStyle(
-                      color: SoftUiTheme.textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
+              const Flexible(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('📺', style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'STORE DISPLAY BOARD',
+                        style: TextStyle(
+                          color: SoftUiTheme.textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: SoftUiTheme.cardBg,
                   borderRadius: BorderRadius.circular(20),
@@ -150,15 +163,18 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       height: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _connectionState == StreamConnectionState.connected
+                        color:
+                            _connectionState == StreamConnectionState.connected
                             ? SoftUiTheme.primaryMint
                             : SoftUiTheme.amberWarning,
                         boxShadow: [
                           BoxShadow(
-                            color: (_connectionState == StreamConnectionState.connected
-                                    ? SoftUiTheme.primaryMint
-                                    : SoftUiTheme.amberWarning)
-                                .withOpacity(0.5),
+                            color:
+                                (_connectionState ==
+                                            StreamConnectionState.connected
+                                        ? SoftUiTheme.primaryMint
+                                        : SoftUiTheme.amberWarning)
+                                    .withValues(alpha: 0.5),
                             blurRadius: 6,
                           ),
                         ],
@@ -190,7 +206,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       // Left 60%: NOW SERVING HERO
                       Expanded(
                         flex: 60,
-                        child: _buildNowServingCard(servingNumber, servingCustomer),
+                        child: _buildNowServingCard(
+                          servingNumber,
+                          servingCustomer,
+                        ),
                       ),
                       const SizedBox(width: 24),
                       // Right 40%: ALMOST NEXT + IN LINE
@@ -200,7 +219,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
                           children: [
                             Expanded(
                               flex: 45,
-                              child: _buildAlmostNextCard(almostNumber, almostCustomer),
+                              child: _buildAlmostNextCard(
+                                almostNumber,
+                                almostCustomer,
+                              ),
                             ),
                             const SizedBox(height: 20),
                             Expanded(
@@ -217,12 +239,18 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       children: [
                         SizedBox(
                           height: 380,
-                          child: _buildNowServingCard(servingNumber, servingCustomer),
+                          child: _buildNowServingCard(
+                            servingNumber,
+                            servingCustomer,
+                          ),
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
                           height: 220,
-                          child: _buildAlmostNextCard(almostNumber, almostCustomer),
+                          child: _buildAlmostNextCard(
+                            almostNumber,
+                            almostCustomer,
+                          ),
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
@@ -262,7 +290,9 @@ class _DisplayScreenState extends State<DisplayScreen> {
             decoration: BoxDecoration(
               color: SoftUiTheme.mintLight,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: SoftUiTheme.primaryMint.withOpacity(0.3)),
+              border: Border.all(
+                color: SoftUiTheme.primaryMint.withValues(alpha: 0.3),
+              ),
             ),
             child: const Text(
               '✦ NOW SERVING ✦',
@@ -390,7 +420,11 @@ class _DisplayScreenState extends State<DisplayScreen> {
           ] else ...[
             const Text(
               'No ticket on deck',
-              style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 16, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: SoftUiTheme.textSecondary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ],
@@ -431,7 +465,11 @@ class _DisplayScreenState extends State<DisplayScreen> {
                 ),
                 child: const Text(
                   'Waiting',
-                  style: TextStyle(color: Color(0xFF2563EB), fontSize: 11, fontWeight: FontWeight.w800),
+                  style: TextStyle(
+                    color: Color(0xFF2563EB),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
@@ -442,7 +480,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
                 ? const Center(
                     child: Text(
                       'No other patrons waiting in line',
-                      style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
+                      style: TextStyle(
+                        color: SoftUiTheme.textSecondary,
+                        fontSize: 13,
+                      ),
                     ),
                   )
                 : SingleChildScrollView(
@@ -451,7 +492,10 @@ class _DisplayScreenState extends State<DisplayScreen> {
                       runSpacing: 8,
                       children: waitingNumbers.map((ticketNum) {
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF8FAFC),
                             borderRadius: BorderRadius.circular(12),

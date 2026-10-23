@@ -8,6 +8,7 @@ import 'screens/display_screen.dart';
 import 'screens/services_screen.dart';
 import 'widgets/app_header.dart';
 import 'services/api_service.dart';
+import 'services/sound_haptics_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,12 +48,9 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
     super.initState();
     _checkHealth();
     _healthCheckTimer = Timer.periodic(const Duration(seconds: 15), (_) => _checkHealth());
-    // On web, read the ?ticket= query param to deep-link into the buzzer
     _readTicketFromUrl();
   }
 
-  /// If the app was opened with `?ticket=<id>` (e.g. from a QR code scan),
-  /// automatically switch to the Buzzer tab pre-loaded with that ticket.
   void _readTicketFromUrl() {
     if (!kIsWeb) return;
     try {
@@ -60,11 +58,9 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       final ticketId = uri.queryParameters['ticket'];
       if (ticketId != null && ticketId.isNotEmpty) {
         _activeBuzzerTicketId = ticketId;
-        _selectedIndex = 0; // Buzzer tab
+        _selectedIndex = 0;
       }
-    } catch (_) {
-      // URI parsing failed – ignore and show default screen
-    }
+    } catch (_) {}
   }
 
   @override
@@ -81,6 +77,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   }
 
   void _onTabSelected(int index) {
+    SoundHapticsService().triggerTapFeedback();
     setState(() {
       _selectedIndex = index;
     });
@@ -89,12 +86,15 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   void _openBuzzerForTicket(String ticketId) {
     setState(() {
       _activeBuzzerTicketId = ticketId;
-      _selectedIndex = 0; // Switch to Buzzer screen
+      _selectedIndex = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 850;
+
     Widget activeScreen;
 
     switch (_selectedIndex) {
@@ -129,6 +129,75 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         isBackendOnline: _isBackendOnline,
       ),
       body: activeScreen,
+      bottomNavigationBar: isMobile ? _buildMobileBottomBar() : null,
+    );
+  }
+
+  Widget _buildMobileBottomBar() {
+    return Container(
+      decoration: const BoxDecoration(
+        color: SoftUiTheme.cardBg,
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x0F1E293B),
+            blurRadius: 16,
+            offset: Offset(0, -4),
+          ),
+        ],
+        border: Border(
+          top: BorderSide(color: Color(0xFFEEF2F6), width: 1.5),
+        ),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildBottomNavItem(0, Icons.phone_android_rounded, 'Buzzer'),
+              _buildBottomNavItem(1, Icons.storefront_rounded, 'Counter'),
+              _buildBottomNavItem(2, Icons.tv_rounded, 'Display'),
+              _buildBottomNavItem(3, Icons.list_alt_rounded, 'Services'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavItem(int index, IconData icon, String label) {
+    final isSelected = _selectedIndex == index;
+
+    return InkWell(
+      onTap: () => _onTabSelected(index),
+      borderRadius: BorderRadius.circular(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? SoftUiTheme.mintLight : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 22,
+              color: isSelected ? SoftUiTheme.mintDark : SoftUiTheme.textSecondary,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? SoftUiTheme.mintDark : SoftUiTheme.textSecondary,
+                fontSize: 11,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

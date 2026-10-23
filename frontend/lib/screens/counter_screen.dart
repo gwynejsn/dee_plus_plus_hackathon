@@ -32,7 +32,6 @@ class _CounterScreenState extends State<CounterScreen> {
   AiPrediction? _aiPrediction;
   String? _selectedAiServiceId;
 
-  bool _isLoading = false;
   bool _isCallingNext = false;
   bool _isLoadingAi = false;
   SseSubscription? _sseSubscription;
@@ -55,7 +54,6 @@ class _CounterScreenState extends State<CounterScreen> {
   void _startSse() {
     _sseSubscription = SseService().subscribeDisplay(
       onEvent: (event) {
-        // Any queue update triggers instant silent refresh
         _refreshQueueSilently();
       },
       onStateChange: (state) {
@@ -67,7 +65,6 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   Future<void> _loadAllData() async {
-    setState(() => _isLoading = true);
     try {
       final results = await Future.wait([
         ApiService().getQueueSummary(),
@@ -76,23 +73,23 @@ class _CounterScreenState extends State<CounterScreen> {
         ApiService().getAnalyticsOverview(),
       ]);
 
-      setState(() {
-        _summary = results[0] as QueueSummary;
-        _activeTickets = results[1] as List<QueueTicket>;
-        _services = results[2] as List<ServiceModel>;
-        _analyticsOverview = results[3] as AnalyticsOverview;
-        if (_selectedAiServiceId == null && _services.isNotEmpty) {
-          _selectedAiServiceId = _services.first.id;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          _summary = results[0] as QueueSummary;
+          _activeTickets = results[1] as List<QueueTicket>;
+          _services = results[2] as List<ServiceModel>;
+          _analyticsOverview = results[3] as AnalyticsOverview;
+          if (_selectedAiServiceId == null && _services.isNotEmpty) {
+            _selectedAiServiceId = _services.first.id;
+          }
+        });
+      }
 
       if (_selectedAiServiceId != null) {
         _fetchAiPrediction(_selectedAiServiceId!);
       }
     } catch (err) {
       debugPrint('Error loading counter data: $err');
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -187,6 +184,7 @@ class _CounterScreenState extends State<CounterScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= 1000;
+    final isMobile = screenWidth < 600;
 
     final totalActive = _summary?.totalActive ?? _activeTickets.length;
     final waitingCount = _summary?.waitingCount ?? _activeTickets.where((t) => t.isWaiting || t.isAlmostNext).length;
@@ -196,91 +194,107 @@ class _CounterScreenState extends State<CounterScreen> {
     return RefreshIndicator(
       onRefresh: _loadAllData,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 14 : 20, vertical: isMobile ? 14 : 20),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1300),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Bar
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '🏪 Merchant Counter',
-                          style: TextStyle(
-                            color: SoftUiTheme.textPrimary,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Cashier desk and active queue coordinator',
-                          style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
-                        ),
-                      ],
+                // Header Bar (Responsive for Phones)
+                if (isMobile) ...[
+                  const Text(
+                    '🏪 Merchant Counter',
+                    style: TextStyle(
+                      color: SoftUiTheme.textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
                     ),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final created = await WalkinTicketDialog.show(context, _services);
-                        if (created != null && mounted) {
-                          _refreshQueueSilently();
-                          // ignore: use_build_context_synchronously
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Issued Ticket #${created.ticketNumber} for ${created.customerName}!'),
-                              backgroundColor: SoftUiTheme.primaryMint,
-                            ),
-                          );
-                          // Show QR code for the customer to scan their queue number
-                          // ignore: use_build_context_synchronously
-                          await TicketQrDialog.show(context, created);
-                        }
-                      },
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    'Cashier desk and active queue coordinator',
+                    style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 44,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _openWalkInDialog(),
                       icon: const Icon(Icons.add_rounded, size: 18),
                       label: const Text('Issue Walk-In Ticket'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: SoftUiTheme.primaryMint,
                         foregroundColor: Colors.white,
                         elevation: 0,
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ] else ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '🏪 Merchant Counter',
+                            style: TextStyle(
+                              color: SoftUiTheme.textPrimary,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Cashier desk and active queue coordinator',
+                            style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () => _openWalkInDialog(),
+                        icon: const Icon(Icons.add_rounded, size: 18),
+                        label: const Text('Issue Walk-In Ticket'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: SoftUiTheme.primaryMint,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shadowColor: Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
-                // KPI Bar
+                // KPI Bar (2x2 Grid on Mobile, Row on Desktop)
                 _buildKpiBar(totalActive, waitingCount, servingCount, revenue),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
                 // Hero Call Next Action Card
                 _buildCallNextHero(waitingCount),
 
-                const SizedBox(height: 22),
+                const SizedBox(height: 20),
 
                 // Main Layout Split
                 if (isDesktop)
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Active Queue List (Left 65%)
                       Expanded(
                         flex: 65,
                         child: _buildQueueListSection(),
                       ),
                       const SizedBox(width: 20),
-                      // AI & Financials (Right 35%)
                       Expanded(
                         flex: 35,
                         child: Column(
@@ -305,7 +319,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   Column(
                     children: [
                       _buildQueueListSection(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 18),
                       AiAdvisorCard(
                         services: _services,
                         selectedServiceId: _selectedAiServiceId,
@@ -327,28 +341,44 @@ class _CounterScreenState extends State<CounterScreen> {
     );
   }
 
+  Future<void> _openWalkInDialog() async {
+    final created = await WalkinTicketDialog.show(context, _services);
+    if (created != null && mounted) {
+      _refreshQueueSilently();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Issued Ticket #${created.ticketNumber} for ${created.customerName}!'),
+          backgroundColor: SoftUiTheme.primaryMint,
+        ),
+      );
+      await TicketQrDialog.show(context, created);
+    }
+  }
+
   Widget _buildKpiBar(int active, int waiting, int serving, double revenue) {
     return LayoutBuilder(
       builder: (ctx, constraints) {
-        final isSmall = constraints.maxWidth < 600;
+        final isSmall = constraints.maxWidth < 640;
+        final cardWidth = isSmall ? (constraints.maxWidth - 12) / 2 : 180.0;
+
         return Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
-            _buildKpiCard('ACTIVE QUEUE', '$active', const Color(0xFF2563EB), isSmall),
-            _buildKpiCard('WAITING', '$waiting', SoftUiTheme.amberWarning, isSmall),
-            _buildKpiCard('NOW SERVING', '$serving', SoftUiTheme.primaryMint, isSmall),
-            _buildKpiCard('TODAY\'S SALES', '₱${revenue.toStringAsFixed(0)}', const Color(0xFF9333EA), isSmall),
+            _buildKpiCard('ACTIVE QUEUE', '$active', const Color(0xFF2563EB), cardWidth),
+            _buildKpiCard('WAITING', '$waiting', SoftUiTheme.amberWarning, cardWidth),
+            _buildKpiCard('NOW SERVING', '$serving', SoftUiTheme.primaryMint, cardWidth),
+            _buildKpiCard('TODAY\'S SALES', '₱${revenue.toStringAsFixed(0)}', const Color(0xFF9333EA), cardWidth),
           ],
         );
       },
     );
   }
 
-  Widget _buildKpiCard(String title, String val, Color color, bool isSmall) {
+  Widget _buildKpiCard(String title, String val, Color color, double width) {
     return Container(
-      width: isSmall ? double.infinity : 180,
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      width: width,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: SoftUiTheme.cardBg,
         borderRadius: SoftUiTheme.cardRadius,
@@ -358,31 +388,21 @@ class _CounterScreenState extends State<CounterScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 7,
-                height: 7,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: SoftUiTheme.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              color: SoftUiTheme.textSecondary,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(
             val,
             style: TextStyle(
               color: color,
-              fontSize: 26,
+              fontSize: 22,
               fontWeight: FontWeight.w900,
               fontFamily: 'monospace',
             ),
@@ -394,65 +414,149 @@ class _CounterScreenState extends State<CounterScreen> {
 
   Widget _buildCallNextHero(int waitingCount) {
     return Container(
-      padding: const EdgeInsets.all(22),
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: SoftUiTheme.cardBg,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFEEF2F6)),
-        boxShadow: SoftUiTheme.floatingHeroShadow,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Advance The Line',
-                  style: TextStyle(
-                    color: SoftUiTheme.textPrimary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  waitingCount > 0 
-                      ? '$waitingCount customer(s) waiting. Calls next number and buzzes their phone.'
-                      : 'No waiting customers in line right now.',
-                  style: const TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 14),
-          ElevatedButton.icon(
-            onPressed: (waitingCount == 0 || _isCallingNext) ? null : _handleCallNext,
-            icon: _isCallingNext
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                  )
-                : const Icon(Icons.campaign_rounded, size: 20),
-            label: Text(_isCallingNext ? 'Calling...' : 'CALL NEXT'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: SoftUiTheme.primaryMint,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14),
-            ),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF00E5AB), Color(0xFF00B887)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: SoftUiTheme.primaryMint.withValues(alpha: 0.35),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
+      ),
+      child: LayoutBuilder(
+        builder: (ctx, constraints) {
+          final isNarrow = constraints.maxWidth < 500;
+
+          if (isNarrow) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Text('⚡', style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 8),
+                    Text(
+                      'Ready to serve next?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  waitingCount > 0
+                      ? '$waitingCount customer(s) waiting in queue'
+                      : 'No waiting tickets in line right now',
+                  style: const TextStyle(
+                    color: Color(0xE6FFFFFF),
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton.icon(
+                    onPressed: waitingCount > 0 && !_isCallingNext ? _handleCallNext : null,
+                    icon: _isCallingNext
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(color: SoftUiTheme.mintDark, strokeWidth: 2),
+                          )
+                        : const Icon(Icons.campaign_rounded, size: 20),
+                    label: const Text(
+                      'CALL NEXT TICKET',
+                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: SoftUiTheme.mintDark,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Text('⚡', style: TextStyle(fontSize: 22)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Ready to serve next customer?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    waitingCount > 0
+                        ? '$waitingCount customer(s) waiting in queue'
+                        : 'No waiting tickets in line right now',
+                    style: const TextStyle(
+                      color: Color(0xE6FFFFFF),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              ElevatedButton.icon(
+                onPressed: waitingCount > 0 && !_isCallingNext ? _handleCallNext : null,
+                icon: _isCallingNext
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(color: SoftUiTheme.mintDark, strokeWidth: 2),
+                      )
+                    : const Icon(Icons.campaign_rounded, size: 20),
+                label: const Text(
+                  'CALL NEXT TICKET',
+                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: SoftUiTheme.mintDark,
+                  elevation: 2,
+                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildQueueListSection() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: SoftUiTheme.cardBg,
         borderRadius: SoftUiTheme.cardRadius,
@@ -465,18 +569,44 @@ class _CounterScreenState extends State<CounterScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '📋 Active Tickets (${_activeTickets.length})',
-                style: const TextStyle(
-                  color: SoftUiTheme.textPrimary,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w900,
-                ),
+              Row(
+                children: [
+                  const Text('📋', style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Active Queue Line',
+                    style: TextStyle(
+                      color: SoftUiTheme.textPrimary,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '${_activeTickets.length}',
+                      style: const TextStyle(
+                        color: Color(0xFF2563EB),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 11.5,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                icon: const Icon(Icons.refresh_rounded, color: SoftUiTheme.textSecondary, size: 20),
+              TextButton.icon(
                 onPressed: _refreshQueueSilently,
-                tooltip: 'Refresh Queue',
+                icon: const Icon(Icons.refresh_rounded, size: 16),
+                label: const Text('Refresh'),
+                style: TextButton.styleFrom(
+                  foregroundColor: SoftUiTheme.textSecondary,
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                ),
               ),
             ],
           ),
@@ -484,25 +614,18 @@ class _CounterScreenState extends State<CounterScreen> {
 
           if (_activeTickets.isEmpty)
             Container(
-              padding: const EdgeInsets.all(36),
+              padding: const EdgeInsets.symmetric(vertical: 36),
               alignment: Alignment.center,
               child: const Column(
                 children: [
-                  Text('🛋️', style: TextStyle(fontSize: 36)),
-                  SizedBox(height: 10),
+                  Text('🎉', style: TextStyle(fontSize: 32)),
+                  SizedBox(height: 8),
                   Text(
-                    'No active tickets in queue.',
+                    'All caught up! No active tickets in queue.',
                     style: TextStyle(
-                      color: SoftUiTheme.textPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      color: SoftUiTheme.textSecondary,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'All customers have been served. Tap "Issue Walk-In Ticket" to queue a new patron.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
                   ),
                 ],
               ),
@@ -521,13 +644,21 @@ class _CounterScreenState extends State<CounterScreen> {
                   onComplete: () => _handleTicketAction('complete', t.id),
                   onCancel: () => _handleTicketAction('cancel', t.id),
                   onOverrideWait: () async {
-                    final res = await OverrideWaitDialog.show(context, t.id, t.estimatedWaitMinutes);
-                    if (res == true) _refreshQueueSilently();
+                    final newMins = await OverrideWaitDialog.show(
+                      context,
+                      t.id,
+                      t.estimatedWaitMinutes,
+                    );
+                    if (newMins == true && mounted) {
+                      _refreshQueueSilently();
+                    }
                   },
                   onOpenBuzzer: () {
                     widget.onOpenBuzzer?.call(t.id);
                   },
-                  onShowQr: () => TicketQrDialog.show(context, t),
+                  onShowQr: () {
+                    TicketQrDialog.show(context, t);
+                  },
                 );
               },
             ),
@@ -537,13 +668,11 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   Widget _buildOperationsSummaryCard() {
-    final overview = _analyticsOverview;
-    final completedCount = overview?.completedTicketsCount ?? 0;
-    final totalSales = overview?.totalRevenuePhp ?? 0.0;
-    final avgDuration = overview?.averageDurationMinutes ?? 18;
+    final avgWait = (_analyticsOverview?.averageDurationMinutes ?? 15).toDouble();
+    final totalCompleted = _analyticsOverview?.completedTicketsCount ?? 0;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: SoftUiTheme.cardBg,
         borderRadius: SoftUiTheme.cardRadius,
@@ -553,58 +682,35 @@ class _CounterScreenState extends State<CounterScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          const Row(
             children: [
-              const Text(
-                '📊 Daily Telemetry',
+              Text('📊', style: TextStyle(fontSize: 16)),
+              SizedBox(width: 8),
+              Text(
+                'Shift Operations Metrics',
                 style: TextStyle(
                   color: SoftUiTheme.textPrimary,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.w800,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: SoftUiTheme.mintLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'TODAY',
-                  style: TextStyle(
-                    color: SoftUiTheme.mintDark,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          _buildTelemetryRow('Services Completed', '$completedCount patrons'),
-          _buildTelemetryRow('Total Revenue', '₱${totalSales.toStringAsFixed(0)}', color: SoftUiTheme.primaryMint),
-          _buildTelemetryRow('Avg Service Time', '$avgDuration mins'),
-          _buildTelemetryRow('Walk-In Retention', '94.2% (Estimated)', color: SoftUiTheme.amberWarning),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTelemetryRow(String label, String val, {Color? color}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13, fontWeight: FontWeight.w500)),
-          Text(
-            val,
-            style: TextStyle(
-              color: color ?? SoftUiTheme.textPrimary,
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-            ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Avg Turnaround Time', style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12.5)),
+              Text('${avgWait.toStringAsFixed(1)} mins', style: const TextStyle(fontWeight: FontWeight.w800, color: SoftUiTheme.textPrimary, fontSize: 13)),
+            ],
+          ),
+          const Divider(height: 16, color: Color(0xFFF1F5F9)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Total Customers Served', style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12.5)),
+              Text('$totalCompleted', style: const TextStyle(fontWeight: FontWeight.w800, color: SoftUiTheme.primaryMint, fontSize: 13)),
+            ],
           ),
         ],
       ),

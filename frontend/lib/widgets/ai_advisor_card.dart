@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../config/soft_ui_theme.dart';
 import '../models/ai_prediction.dart';
 import '../models/service_model.dart';
@@ -61,7 +62,10 @@ class AiAdvisorCard extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF3E8FF),
                   borderRadius: BorderRadius.circular(20),
@@ -83,13 +87,19 @@ class AiAdvisorCard extends StatelessWidget {
           // Service Dropdown
           if (services.isNotEmpty) ...[
             DropdownButtonFormField<String>(
-              value: selectedServiceId ?? services.first.id,
+              initialValue: selectedServiceId ?? services.first.id,
               decoration: InputDecoration(
                 labelText: 'Select Service to Analyze',
-                labelStyle: const TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
+                labelStyle: const TextStyle(
+                  color: SoftUiTheme.textSecondary,
+                  fontSize: 13,
+                ),
                 filled: true,
                 fillColor: const Color(0xFFF8FAFC),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
                   borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
@@ -100,11 +110,18 @@ class AiAdvisorCard extends StatelessWidget {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: SoftUiTheme.primaryMint, width: 2),
+                  borderSide: const BorderSide(
+                    color: SoftUiTheme.primaryMint,
+                    width: 2,
+                  ),
                 ),
               ),
               dropdownColor: SoftUiTheme.cardBg,
-              style: const TextStyle(color: SoftUiTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                color: SoftUiTheme.textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
               items: services.map((s) {
                 return DropdownMenuItem<String>(
                   value: s.id,
@@ -134,7 +151,10 @@ class AiAdvisorCard extends StatelessWidget {
                     SizedBox(height: 10),
                     Text(
                       'Evaluating historical telemetry via Gemini AI...',
-                      style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12),
+                      style: TextStyle(
+                        color: SoftUiTheme.textSecondary,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -184,7 +204,9 @@ class AiAdvisorCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: riskBg,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: riskColor.withOpacity(0.3)),
+                      border: Border.all(
+                        color: riskColor.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,8 +260,8 @@ class AiAdvisorCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    prediction!.operationalAdvice.isNotEmpty 
-                        ? prediction!.operationalAdvice 
+                    prediction!.operationalAdvice.isNotEmpty
+                        ? prediction!.operationalAdvice
                         : prediction!.summaryInsight,
                     style: const TextStyle(
                       color: SoftUiTheme.textPrimary,

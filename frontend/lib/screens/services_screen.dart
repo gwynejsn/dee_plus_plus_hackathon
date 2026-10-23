@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../config/soft_ui_theme.dart';
 import '../models/service_model.dart';
 import '../services/api_service.dart';
@@ -28,7 +29,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load services: $e'), backgroundColor: const Color(0xFFEF4444)),
+          SnackBar(
+            content: Text('Failed to load services: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
         );
       }
     } finally {
@@ -38,11 +42,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   void _showAddEditDialog([ServiceModel? existing]) {
     final nameCtrl = TextEditingController(text: existing?.name ?? '');
-    final priceCtrl = TextEditingController(text: existing != null ? existing.unitPrice.toStringAsFixed(0) : '200');
-    final durationCtrl = TextEditingController(text: existing != null ? existing.baselineDurationMinutes.toString() : '20');
+    final priceCtrl = TextEditingController(
+      text: existing != null ? existing.unitPrice.toStringAsFixed(0) : '200',
+    );
+    final durationCtrl = TextEditingController(
+      text: existing != null
+          ? existing.baselineDurationMinutes.toString()
+          : '20',
+    );
     String category = existing?.category ?? 'BARBERSHOP';
 
-    final categories = ['BARBERSHOP', 'CARINDERIA', 'SALON', 'LAUNDRY', 'CLINIC', 'OTHER'];
+    final categories = [
+      'BARBERSHOP',
+      'CARINDERIA',
+      'SALON',
+      'LAUNDRY',
+      'CLINIC',
+      'OTHER',
+    ];
 
     showDialog(
       context: context,
@@ -69,10 +86,15 @@ class _ServicesScreenState extends State<ServicesScreen> {
               children: [
                 TextField(
                   controller: nameCtrl,
-                  style: const TextStyle(color: SoftUiTheme.textPrimary, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    color: SoftUiTheme.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Service Name',
-                    labelStyle: const TextStyle(color: SoftUiTheme.textSecondary),
+                    labelStyle: const TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                    ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
                     border: OutlineInputBorder(
@@ -85,18 +107,26 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: SoftUiTheme.primaryMint, width: 2),
+                      borderSide: const BorderSide(
+                        color: SoftUiTheme.primaryMint,
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 14),
                 DropdownButtonFormField<String>(
-                  value: category,
+                  initialValue: category,
                   dropdownColor: SoftUiTheme.cardBg,
-                  style: const TextStyle(color: SoftUiTheme.textPrimary, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    color: SoftUiTheme.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Category',
-                    labelStyle: const TextStyle(color: SoftUiTheme.textSecondary),
+                    labelStyle: const TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                    ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
                     border: OutlineInputBorder(
@@ -109,10 +139,15 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: SoftUiTheme.primaryMint, width: 2),
+                      borderSide: const BorderSide(
+                        color: SoftUiTheme.primaryMint,
+                        width: 2,
+                      ),
                     ),
                   ),
-                  items: categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                  items: categories
+                      .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                      .toList(),
                   onChanged: (v) {
                     if (v != null) category = v;
                   },
@@ -121,12 +156,20 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 TextField(
                   controller: priceCtrl,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: SoftUiTheme.textPrimary, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    color: SoftUiTheme.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Unit Price (PHP ₱)',
-                    labelStyle: const TextStyle(color: SoftUiTheme.textSecondary),
+                    labelStyle: const TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                    ),
                     prefixText: '₱ ',
-                    prefixStyle: const TextStyle(color: SoftUiTheme.textPrimary, fontWeight: FontWeight.w700),
+                    prefixStyle: const TextStyle(
+                      color: SoftUiTheme.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
                     border: OutlineInputBorder(
@@ -139,7 +182,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: SoftUiTheme.primaryMint, width: 2),
+                      borderSide: const BorderSide(
+                        color: SoftUiTheme.primaryMint,
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
@@ -147,12 +193,19 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 TextField(
                   controller: durationCtrl,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(color: SoftUiTheme.textPrimary, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    color: SoftUiTheme.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Baseline Duration (Minutes)',
-                    labelStyle: const TextStyle(color: SoftUiTheme.textSecondary),
+                    labelStyle: const TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                    ),
                     suffixText: 'mins',
-                    suffixStyle: const TextStyle(color: SoftUiTheme.textSecondary),
+                    suffixStyle: const TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                    ),
                     filled: true,
                     fillColor: const Color(0xFFF8FAFC),
                     border: OutlineInputBorder(
@@ -165,7 +218,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: SoftUiTheme.primaryMint, width: 2),
+                      borderSide: const BorderSide(
+                        color: SoftUiTheme.primaryMint,
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
@@ -175,8 +231,13 @@ class _ServicesScreenState extends State<ServicesScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              style: TextButton.styleFrom(foregroundColor: SoftUiTheme.textSecondary),
-              child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.w600)),
+              style: TextButton.styleFrom(
+                foregroundColor: SoftUiTheme.textSecondary,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -205,7 +266,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 } catch (e) {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error saving service: $e'), backgroundColor: SoftUiTheme.redDanger),
+                      SnackBar(
+                        content: Text('Error saving service: $e'),
+                        backgroundColor: SoftUiTheme.redDanger,
+                      ),
                     );
                   }
                 }
@@ -214,10 +278,18 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 backgroundColor: SoftUiTheme.primaryMint,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
-              child: const Text('Save Service', style: TextStyle(fontWeight: FontWeight.w800)),
+              child: const Text(
+                'Save Service',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
             ),
           ],
         );
@@ -227,37 +299,43 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 14 : 20,
+        vertical: isMobile ? 16 : 24,
+      ),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1000),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '📋 Service Catalog',
-                        style: TextStyle(
-                          color: SoftUiTheme.textPrimary,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Configure shop offerings, prices, and baseline service times',
-                        style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
-                      ),
-                    ],
+              if (isMobile) ...[
+                const Text(
+                  '📋 Service Catalog',
+                  style: TextStyle(
+                    color: SoftUiTheme.textPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -0.5,
                   ),
-                  ElevatedButton.icon(
+                ),
+                const SizedBox(height: 2),
+                const Text(
+                  'Configure shop offerings, prices, and baseline service times',
+                  style: TextStyle(
+                    color: SoftUiTheme.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: ElevatedButton.icon(
                     onPressed: () => _showAddEditDialog(),
                     icon: const Icon(Icons.add_rounded, size: 18),
                     label: const Text('Add Service'),
@@ -265,18 +343,74 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       backgroundColor: SoftUiTheme.primaryMint,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ] else ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '📋 Service Catalog',
+                            style: TextStyle(
+                              color: SoftUiTheme.textPrimary,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Configure shop offerings, prices, and baseline service times',
+                            style: TextStyle(
+                              color: SoftUiTheme.textSecondary,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    ElevatedButton.icon(
+                      onPressed: () => _showAddEditDialog(),
+                      icon: const Icon(Icons.add_rounded, size: 18),
+                      label: const Text('Add Service'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: SoftUiTheme.primaryMint,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        shadowColor: Colors.transparent,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
 
               const SizedBox(height: 20),
 
               if (_isLoading)
-                const Center(child: Padding(padding: EdgeInsets.all(40), child: CircularProgressIndicator(color: SoftUiTheme.primaryMint)))
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(40),
+                    child: CircularProgressIndicator(
+                      color: SoftUiTheme.primaryMint,
+                    ),
+                  ),
+                )
               else if (_services.isEmpty)
                 Container(
                   padding: const EdgeInsets.all(40),
@@ -318,7 +452,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                               borderRadius: BorderRadius.circular(14),
                             ),
                             alignment: Alignment.center,
-                            child: const Text('🏷️', style: TextStyle(fontSize: 22)),
+                            child: const Text(
+                              '🏷️',
+                              style: TextStyle(fontSize: 22),
+                            ),
                           ),
                           const SizedBox(width: 14),
                           Expanded(
@@ -337,14 +474,21 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                     ),
                                     const SizedBox(width: 8),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
                                       decoration: BoxDecoration(
                                         color: const Color(0xFFF1F5F9),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
                                         s.category,
-                                        style: const TextStyle(color: SoftUiTheme.textSecondary, fontSize: 10, fontWeight: FontWeight.w700),
+                                        style: const TextStyle(
+                                          color: SoftUiTheme.textSecondary,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -352,18 +496,28 @@ class _ServicesScreenState extends State<ServicesScreen> {
                                 const SizedBox(height: 4),
                                 Text(
                                   '₱${s.unitPrice.toStringAsFixed(0)} • Baseline: ${s.baselineDurationMinutes} mins',
-                                  style: const TextStyle(color: SoftUiTheme.primaryMint, fontSize: 13, fontWeight: FontWeight.w800),
+                                  style: const TextStyle(
+                                    color: SoftUiTheme.primaryMint,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.edit_outlined, color: SoftUiTheme.textSecondary),
+                            icon: const Icon(
+                              Icons.edit_outlined,
+                              color: SoftUiTheme.textSecondary,
+                            ),
                             onPressed: () => _showAddEditDialog(s),
                             tooltip: 'Edit Service',
                           ),
                           IconButton(
-                            icon: const Icon(Icons.delete_outline, color: SoftUiTheme.redDanger),
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: SoftUiTheme.redDanger,
+                            ),
                             onPressed: () async {
                               if (confirm('Deactivate service ${s.name}?')) {
                                 await ApiService().deleteService(s.id);

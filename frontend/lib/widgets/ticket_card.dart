@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../config/soft_ui_theme.dart';
 import '../models/queue_ticket.dart';
 
@@ -51,7 +52,7 @@ class TicketCard extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: SoftUiTheme.cardBg,
         borderRadius: SoftUiTheme.cardRadius,
@@ -70,32 +71,38 @@ class TicketCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Top row: Ticket Number, Customer Name, and Status Badges
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Neumorphic Number Badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: stateBg,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: stateColor.withOpacity(0.3)),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: stateColor.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Text(
                     '#${ticket.ticketNumber}',
                     style: TextStyle(
                       color: stateColor,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w900,
                       fontFamily: 'monospace',
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +111,7 @@ class TicketCard extends StatelessWidget {
                         ticket.customerName,
                         style: const TextStyle(
                           color: SoftUiTheme.textPrimary,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w800,
                         ),
                         maxLines: 1,
@@ -115,62 +122,35 @@ class TicketCard extends StatelessWidget {
                         '${ticket.serviceName} • ₱${ticket.servicePrice.toStringAsFixed(0)} • ~${ticket.estimatedWaitMinutes}m',
                         style: const TextStyle(
                           color: SoftUiTheme.textSecondary,
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-
-                // PAPUNTA NA AKO BADGE
-                if (ticket.onMyWayConfirmed) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: SoftUiTheme.mintLight,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: SoftUiTheme.primaryMint, width: 1.5),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x2600D19E),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('🚶', style: TextStyle(fontSize: 13)),
-                        SizedBox(width: 4),
-                        Text(
-                          'Papunta Na!',
-                          style: TextStyle(
-                            color: SoftUiTheme.mintDark,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                ],
+                const SizedBox(width: 8),
 
                 // State Badge Pill
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: stateBg,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: stateColor.withOpacity(0.2)),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: stateColor.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: Text(
                     state.displayName,
                     style: TextStyle(
                       color: stateColor,
-                      fontSize: 11,
+                      fontSize: 10.5,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -178,9 +158,44 @@ class TicketCard extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 14),
+            // PAPUNTA NA AKO BADGE (Dedicated Banner if confirmed)
+            if (ticket.onMyWayConfirmed) ...[
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: SoftUiTheme.mintLight,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: SoftUiTheme.primaryMint,
+                    width: 1.2,
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('🚶', style: TextStyle(fontSize: 13)),
+                    SizedBox(width: 6),
+                    Text(
+                      'Customer tapped "Papunta Na Ako" — heading to counter!',
+                      style: TextStyle(
+                        color: SoftUiTheme.mintDark,
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 12),
             const Divider(color: Color(0xFFF1F5F9), height: 1),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
             // Action Buttons
             Wrap(
@@ -191,89 +206,151 @@ class TicketCard extends StatelessWidget {
                 if (!isServing) ...[
                   ElevatedButton.icon(
                     onPressed: onCall,
-                    icon: const Icon(Icons.campaign_rounded, size: 16),
+                    icon: const Icon(Icons.campaign_rounded, size: 15),
                     label: const Text('Call'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2563EB),
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 9,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                   ElevatedButton.icon(
                     onPressed: onServe,
-                    icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                    icon: const Icon(Icons.play_arrow_rounded, size: 15),
                     label: const Text('Serve'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SoftUiTheme.primaryMint,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 9,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ] else ...[
                   ElevatedButton.icon(
                     onPressed: onComplete,
-                    icon: const Icon(Icons.check_circle_rounded, size: 16),
+                    icon: const Icon(Icons.check_circle_rounded, size: 15),
                     label: const Text('Done (Complete)'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SoftUiTheme.primaryMint,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 9,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ],
 
                 OutlinedButton.icon(
-                  onPressed: onOverrideWait,
-                  icon: const Icon(Icons.timer_outlined, size: 15, color: SoftUiTheme.textSecondary),
-                  label: const Text('Override Wait'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: SoftUiTheme.textPrimary,
-                    backgroundColor: const Color(0xFFF8FAFC),
-                    side: const BorderSide(color: Color(0xFFE2E8F0)),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  ),
-                ),
-
-                OutlinedButton.icon(
                   onPressed: onOpenBuzzer,
-                  icon: const Icon(Icons.phone_android_rounded, size: 15, color: SoftUiTheme.primaryMint),
-                  label: const Text('View Buzzer'),
+                  icon: const Icon(
+                    Icons.phone_android_rounded,
+                    size: 14,
+                    color: SoftUiTheme.primaryMint,
+                  ),
+                  label: const Text('Buzzer'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: SoftUiTheme.mintDark,
                     backgroundColor: SoftUiTheme.mintLight,
-                    side: BorderSide(color: SoftUiTheme.primaryMint.withOpacity(0.3)),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    side: BorderSide(
+                      color: SoftUiTheme.primaryMint.withValues(alpha: 0.3),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 9,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
 
                 if (onShowQr != null)
                   OutlinedButton.icon(
                     onPressed: onShowQr,
-                    icon: const Icon(Icons.qr_code_rounded, size: 15, color: SoftUiTheme.primaryMint),
-                    label: const Text('QR Code'),
+                    icon: const Icon(
+                      Icons.qr_code_rounded,
+                      size: 14,
+                      color: SoftUiTheme.textSecondary,
+                    ),
+                    label: const Text('QR'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: SoftUiTheme.mintDark,
+                      foregroundColor: SoftUiTheme.textPrimary,
                       backgroundColor: const Color(0xFFF8FAFC),
                       side: const BorderSide(color: Color(0xFFE2E8F0)),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 9,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
 
-                IconButton(
+                OutlinedButton.icon(
+                  onPressed: onOverrideWait,
+                  icon: const Icon(
+                    Icons.timer_outlined,
+                    size: 14,
+                    color: SoftUiTheme.textSecondary,
+                  ),
+                  label: const Text('Wait ETA'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: SoftUiTheme.textPrimary,
+                    backgroundColor: const Color(0xFFF8FAFC),
+                    side: const BorderSide(color: Color(0xFFE2E8F0)),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 9,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+
+                OutlinedButton.icon(
                   onPressed: onCancel,
-                  icon: const Icon(Icons.cancel_outlined, color: SoftUiTheme.redDanger, size: 21),
-                  tooltip: 'Cancel Ticket',
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 14,
+                    color: SoftUiTheme.redDanger,
+                  ),
+                  label: const Text('Cancel'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: SoftUiTheme.redDanger,
+                    backgroundColor: SoftUiTheme.redLight,
+                    side: BorderSide(
+                      color: SoftUiTheme.redDanger.withValues(alpha: 0.3),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 9,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
               ],
             ),
