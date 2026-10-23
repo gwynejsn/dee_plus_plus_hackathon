@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Maven test suite
         run: |
-          cd backend/NextNa
+          cd backend/nextna
           mvn clean test
 
   deploy:

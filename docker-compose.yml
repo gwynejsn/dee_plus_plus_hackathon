@@ -28,7 +28,7 @@ services:
 
   backend:
     build:
-      context: ./backend/NextNa
+      context: ./backend/nextna
       dockerfile: Dockerfile
     container_name: nextna-backend
     restart: always
