@@ -17,15 +17,12 @@ public class OpenApiConfig {
     public OpenAPI nextNaOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("NextNa Virtual Buzzer & Queue Management API")
-                        .description("REST & Real-Time SSE APIs for NextNa Virtual Buzzer and Queue Management System for MSMEs")
+                        .title("NextNa Buzzer & Queue Management API")
+                        .description("Our entry for CSSprint Hackathon, a buzzer for MSMEs")
                         .version("v1.0.0")
                         .contact(new Contact()
                                 .name("Dee++ Team")
-                                .url("https://github.com/dee-plus-plus"))
-                        .license(new License()
-                                .name("MIT License")
-                                .url("https://opensource.org/licenses/MIT")))
+                                .url("https://github.com/gwynejsn/dee_plus_plus_hackathon")))
                 .servers(List.of(
                         new Server().url("http://localhost:8080").description("Local Development Server")
                 ));
