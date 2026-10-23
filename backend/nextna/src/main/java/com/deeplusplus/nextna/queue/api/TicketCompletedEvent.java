@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.domain.events;
+package com.deeplusplus.nextna.queue.api;
 
 import java.math.BigDecimal;
 import java.time.Instant;

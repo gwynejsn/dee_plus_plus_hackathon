@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.application.QueueSummaryDto;
+import com.deeplusplus.nextna.queue.application.QueueSummaryDto;
 
 import java.util.List;
 

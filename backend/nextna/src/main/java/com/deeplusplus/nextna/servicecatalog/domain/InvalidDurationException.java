@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.domain;
+package com.deeplusplus.nextna.servicecatalog.domain;
 
 public class InvalidDurationException extends RuntimeException {
     public InvalidDurationException(String message) {

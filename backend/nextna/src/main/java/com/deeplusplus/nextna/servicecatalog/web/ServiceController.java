@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.servicecatalog.web;
+package com.deeplusplus.nextna.servicecatalog.web;
 
-import com.deeplusplus.NextNa.servicecatalog.application.ServiceCatalogService;
+import com.deeplusplus.nextna.servicecatalog.application.ServiceCatalogService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

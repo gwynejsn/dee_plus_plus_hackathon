@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.application.QueueService;
+import com.deeplusplus.nextna.queue.application.QueueService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

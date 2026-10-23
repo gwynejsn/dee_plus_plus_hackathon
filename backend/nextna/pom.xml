@@ -52,6 +52,10 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
@@ -68,6 +72,16 @@
 			<artifactId>spring-modulith-starter-jpa</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-google-ai-gemini</artifactId>
+			<version>1.0.0-beta1</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j</artifactId>
+			<version>1.0.0-beta1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.application.IssueTicketCommand;
+import com.deeplusplus.nextna.queue.application.IssueTicketCommand;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 

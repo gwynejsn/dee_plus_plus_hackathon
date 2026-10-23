@@ -1,0 +1,291 @@
+{
+  "info": {
+    "name": "NextNa Backend API",
+    "description": "Complete REST API collection for NextNa Virtual Buzzer & Queue Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "serviceId",
+      "value": ""
+    },
+    {
+      "key": "ticketId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Service Catalog",
+      "item": [
+        {
+          "name": "Create Service",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.id) {",
+                  "    pm.collectionVariables.set('serviceId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Classic Fade Haircut\",\n  \"category\": \"BARBERSHOP\",\n  \"unitPrice\": 250.00,\n  \"baselineDurationMinutes\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services"]
+            }
+          }
+        },
+        {
+          "name": "Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services?activeOnly=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services"],
+              "query": [
+                {
+                  "key": "activeOnly",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Service By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/services/{{serviceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "services", "{{serviceId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Queue Engine",
+      "item": [
+        {
+          "name": "Issue Ticket 1 (Juan)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.id) {",
+                  "    pm.collectionVariables.set('ticketId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Juan Dela Cruz\",\n  \"serviceId\": \"{{serviceId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets"]
+            }
+          }
+        },
+        {
+          "name": "Issue Ticket 2 (Maria)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"Maria Santos\",\n  \"serviceId\": \"{{serviceId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets"]
+            }
+          }
+        },
+        {
+          "name": "Get Queue Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Active Queue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets"]
+            }
+          }
+        },
+        {
+          "name": "Call Next Ticket",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets/call-next",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets", "call-next"]
+            }
+          }
+        },
+        {
+          "name": "Confirm On My Way",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets/{{ticketId}}/on-my-way",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets", "{{ticketId}}", "on-my-way"]
+            }
+          }
+        },
+        {
+          "name": "Complete Ticket",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/queue/tickets/{{ticketId}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "queue", "tickets", "{{ticketId}}", "complete"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Analytics and AI",
+      "item": [
+        {
+          "name": "Dashboard Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "analytics", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Financial Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/financial-summary?from=2026-10-01&to=2026-10-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "analytics", "financial-summary"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-10-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2026-10-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Predictive Stats by Service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/predictive-stats/{{serviceId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "analytics", "predictive-stats", "{{serviceId}}"]
+            }
+          }
+        },
+        {
+          "name": "AI Wait Time Prediction",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/analytics/ai-prediction?serviceId={{serviceId}}&dayOfWeek=5&hourOfDay=18",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "analytics", "ai-prediction"],
+              "query": [
+                {
+                  "key": "serviceId",
+                  "value": "{{serviceId}}"
+                },
+                {
+                  "key": "dayOfWeek",
+                  "value": "5"
+                },
+                {
+                  "key": "hourOfDay",
+                  "value": "18"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

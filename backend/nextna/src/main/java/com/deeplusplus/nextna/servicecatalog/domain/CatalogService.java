@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.domain;
+package com.deeplusplus.nextna.servicecatalog.domain;
 
 import java.time.Instant;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.application;
+package com.deeplusplus.nextna.queue.application;
 
 public record IssueTicketCommand(
         String customerName,

@@ -1,11 +1,11 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.application.IssueTicketCommand;
-import com.deeplusplus.NextNa.queue.application.QueueService;
-import com.deeplusplus.NextNa.queue.application.QueueSummaryDto;
-import com.deeplusplus.NextNa.queue.application.QueueTicketResponseDto;
-import com.deeplusplus.NextNa.queue.domain.InvalidTicketStateException;
-import com.deeplusplus.NextNa.queue.domain.TicketNotFoundException;
+import com.deeplusplus.nextna.queue.application.IssueTicketCommand;
+import com.deeplusplus.nextna.queue.application.QueueService;
+import com.deeplusplus.nextna.queue.application.QueueSummaryDto;
+import com.deeplusplus.nextna.queue.application.QueueTicketResponseDto;
+import com.deeplusplus.nextna.queue.domain.InvalidTicketStateException;
+import com.deeplusplus.nextna.queue.domain.TicketNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,2 +1,2 @@
 @org.springframework.modulith.NamedInterface("api")
-package com.deeplusplus.NextNa.servicecatalog.api;
+package com.deeplusplus.nextna.servicecatalog.api;

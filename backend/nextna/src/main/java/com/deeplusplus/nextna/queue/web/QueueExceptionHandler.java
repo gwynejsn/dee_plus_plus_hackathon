@@ -1,9 +1,9 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.domain.InvalidCustomerNameException;
-import com.deeplusplus.NextNa.queue.domain.InvalidTicketNumberException;
-import com.deeplusplus.NextNa.queue.domain.InvalidTicketStateException;
-import com.deeplusplus.NextNa.queue.domain.TicketNotFoundException;
+import com.deeplusplus.nextna.queue.domain.InvalidCustomerNameException;
+import com.deeplusplus.nextna.queue.domain.InvalidTicketNumberException;
+import com.deeplusplus.nextna.queue.domain.InvalidTicketStateException;
+import com.deeplusplus.nextna.queue.domain.TicketNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

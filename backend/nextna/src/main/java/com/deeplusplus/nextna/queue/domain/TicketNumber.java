@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.queue.domain;
+package com.deeplusplus.nextna.queue.domain;
 
 public record TicketNumber(int value) {
 

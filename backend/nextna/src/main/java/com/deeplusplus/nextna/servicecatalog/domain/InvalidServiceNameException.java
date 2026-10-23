@@ -1,4 +1,4 @@
-package com.deeplusplus.NextNa.servicecatalog.domain;
+package com.deeplusplus.nextna.servicecatalog.domain;
 
 public class InvalidServiceNameException extends RuntimeException {
     public InvalidServiceNameException(String message) {

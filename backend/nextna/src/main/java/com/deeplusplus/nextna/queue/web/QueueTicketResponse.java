@@ -1,6 +1,6 @@
-package com.deeplusplus.NextNa.queue.web;
+package com.deeplusplus.nextna.queue.web;
 
-import com.deeplusplus.NextNa.queue.application.QueueTicketResponseDto;
+import com.deeplusplus.nextna.queue.application.QueueTicketResponseDto;
 
 import java.math.BigDecimal;
 import java.time.Instant;
