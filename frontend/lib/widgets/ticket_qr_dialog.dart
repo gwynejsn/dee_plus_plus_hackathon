@@ -59,14 +59,27 @@ class TicketQrDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Flexible(
-                      child: Text(
-                        '🎫 Scan Your Queue Ticket',
-                        style: TextStyle(
-                          color: SoftUiTheme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.qr_code_2_rounded,
+                            color: SoftUiTheme.primaryMint,
+                            size: 20,
+                          ),
+                          SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              'Scan Your Queue Ticket',
+                              style: TextStyle(
+                                color: SoftUiTheme.textPrimary,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w800,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     IconButton(
@@ -259,7 +272,15 @@ class TicketQrDialog extends StatelessWidget {
                       Clipboard.setData(ClipboardData(text: url));
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('📋 Buzzer link copied to clipboard!'),
+                          content: Row(
+                            children: [
+                              Icon(Icons.copy_rounded, color: Colors.white, size: 18),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text('Buzzer link copied to clipboard!'),
+                              ),
+                            ],
+                          ),
                           backgroundColor: SoftUiTheme.primaryMint,
                           duration: Duration(seconds: 2),
                         ),

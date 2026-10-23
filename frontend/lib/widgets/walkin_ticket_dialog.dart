@@ -106,13 +106,23 @@ class _WalkinTicketDialogState extends State<WalkinTicketDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      '➕ Issue Walk-In Ticket',
-                      style: TextStyle(
-                        color: SoftUiTheme.textPrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                      ),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.confirmation_number_outlined,
+                          color: SoftUiTheme.primaryMint,
+                          size: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Issue Walk-In Ticket',
+                          style: TextStyle(
+                            color: SoftUiTheme.textPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
                     ),
                     IconButton(
                       icon: const Icon(
@@ -169,6 +179,7 @@ class _WalkinTicketDialogState extends State<WalkinTicketDialog> {
 
                 // Service Dropdown
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   initialValue: _selectedServiceId,
                   decoration: InputDecoration(
                     labelText: 'Select Service Offering *',
@@ -203,6 +214,8 @@ class _WalkinTicketDialogState extends State<WalkinTicketDialog> {
                       value: s.id,
                       child: Text(
                         '${s.name} — ₱${s.unitPrice.toStringAsFixed(0)} (~${s.baselineDurationMinutes}m)',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     );
                   }).toList(),

@@ -71,7 +71,7 @@ class TicketCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(14.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -79,15 +79,14 @@ class TicketCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Neumorphic Number Badge
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+                    horizontal: 9,
+                    vertical: 4,
                   ),
                   decoration: BoxDecoration(
                     color: stateBg,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: stateColor.withValues(alpha: 0.3),
                     ),
@@ -96,7 +95,7 @@ class TicketCard extends StatelessWidget {
                     '#${ticket.ticketNumber}',
                     style: TextStyle(
                       color: stateColor,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w900,
                       fontFamily: 'monospace',
                     ),
@@ -111,7 +110,7 @@ class TicketCard extends StatelessWidget {
                         ticket.customerName,
                         style: const TextStyle(
                           color: SoftUiTheme.textPrimary,
-                          fontSize: 15,
+                          fontSize: 14.5,
                           fontWeight: FontWeight.w800,
                         ),
                         maxLines: 1,
@@ -122,7 +121,7 @@ class TicketCard extends StatelessWidget {
                         '${ticket.serviceName} • ₱${ticket.servicePrice.toStringAsFixed(0)} • ~${ticket.estimatedWaitMinutes}m',
                         style: const TextStyle(
                           color: SoftUiTheme.textSecondary,
-                          fontSize: 12,
+                          fontSize: 11.5,
                           fontWeight: FontWeight.w500,
                         ),
                         maxLines: 1,
@@ -131,17 +130,16 @@ class TicketCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
 
-                // State Badge Pill
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+                    horizontal: 7,
+                    vertical: 3,
                   ),
                   decoration: BoxDecoration(
                     color: stateBg,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: stateColor.withValues(alpha: 0.2),
                     ),
@@ -150,7 +148,7 @@ class TicketCard extends StatelessWidget {
                     state.displayName,
                     style: TextStyle(
                       color: stateColor,
-                      fontSize: 10.5,
+                      fontSize: 10,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -158,34 +156,41 @@ class TicketCard extends StatelessWidget {
               ],
             ),
 
-            // PAPUNTA NA AKO BADGE (Dedicated Banner if confirmed)
+            // Papunta Na Ako Status Banner
             if (ticket.onMyWayConfirmed) ...[
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
-                  vertical: 5,
+                  vertical: 6,
                 ),
                 decoration: BoxDecoration(
                   color: SoftUiTheme.mintLight,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: SoftUiTheme.primaryMint,
                     width: 1.2,
                   ),
                 ),
                 child: const Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('🚶', style: TextStyle(fontSize: 13)),
+                    Icon(
+                      Icons.directions_walk_rounded,
+                      color: SoftUiTheme.mintDark,
+                      size: 15,
+                    ),
                     SizedBox(width: 6),
-                    Text(
-                      'Customer tapped "Papunta Na Ako" — heading to counter!',
-                      style: TextStyle(
-                        color: SoftUiTheme.mintDark,
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w800,
+                    Expanded(
+                      child: Text(
+                        'Customer on the way to counter ("Papunta Na Ako")',
+                        style: TextStyle(
+                          color: SoftUiTheme.mintDark,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -193,37 +198,37 @@ class TicketCard extends StatelessWidget {
               ),
             ],
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             const Divider(color: Color(0xFFF1F5F9), height: 1),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // Action Buttons
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 6,
+              runSpacing: 6,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (!isServing) ...[
                   ElevatedButton.icon(
                     onPressed: onCall,
-                    icon: const Icon(Icons.campaign_rounded, size: 15),
+                    icon: const Icon(Icons.campaign_rounded, size: 14),
                     label: const Text('Call'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2563EB),
                       foregroundColor: Colors.white,
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 9,
+                        horizontal: 12,
+                        vertical: 8,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                   ElevatedButton.icon(
                     onPressed: onServe,
-                    icon: const Icon(Icons.play_arrow_rounded, size: 15),
+                    icon: const Icon(Icons.play_arrow_rounded, size: 14),
                     label: const Text('Serve'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SoftUiTheme.primaryMint,
@@ -231,30 +236,30 @@ class TicketCard extends StatelessWidget {
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 9,
+                        horizontal: 12,
+                        vertical: 8,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                 ] else ...[
                   ElevatedButton.icon(
                     onPressed: onComplete,
-                    icon: const Icon(Icons.check_circle_rounded, size: 15),
-                    label: const Text('Done (Complete)'),
+                    icon: const Icon(Icons.check_circle_rounded, size: 14),
+                    label: const Text('Done'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: SoftUiTheme.primaryMint,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shadowColor: Colors.transparent,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 9,
+                        horizontal: 14,
+                        vertical: 8,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -264,7 +269,7 @@ class TicketCard extends StatelessWidget {
                   onPressed: onOpenBuzzer,
                   icon: const Icon(
                     Icons.phone_android_rounded,
-                    size: 14,
+                    size: 13,
                     color: SoftUiTheme.primaryMint,
                   ),
                   label: const Text('Buzzer'),
@@ -275,11 +280,11 @@ class TicketCard extends StatelessWidget {
                       color: SoftUiTheme.primaryMint.withValues(alpha: 0.3),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 9,
+                      horizontal: 10,
+                      vertical: 8,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
@@ -289,7 +294,7 @@ class TicketCard extends StatelessWidget {
                     onPressed: onShowQr,
                     icon: const Icon(
                       Icons.qr_code_rounded,
-                      size: 14,
+                      size: 13,
                       color: SoftUiTheme.textSecondary,
                     ),
                     label: const Text('QR'),
@@ -298,11 +303,11 @@ class TicketCard extends StatelessWidget {
                       backgroundColor: const Color(0xFFF8FAFC),
                       side: const BorderSide(color: Color(0xFFE2E8F0)),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 9,
+                        horizontal: 10,
+                        vertical: 8,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -311,20 +316,20 @@ class TicketCard extends StatelessWidget {
                   onPressed: onOverrideWait,
                   icon: const Icon(
                     Icons.timer_outlined,
-                    size: 14,
+                    size: 13,
                     color: SoftUiTheme.textSecondary,
                   ),
-                  label: const Text('Wait ETA'),
+                  label: const Text('Wait'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: SoftUiTheme.textPrimary,
                     backgroundColor: const Color(0xFFF8FAFC),
                     side: const BorderSide(color: Color(0xFFE2E8F0)),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 9,
+                      horizontal: 10,
+                      vertical: 8,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
@@ -333,7 +338,7 @@ class TicketCard extends StatelessWidget {
                   onPressed: onCancel,
                   icon: const Icon(
                     Icons.close_rounded,
-                    size: 14,
+                    size: 13,
                     color: SoftUiTheme.redDanger,
                   ),
                   label: const Text('Cancel'),
@@ -344,11 +349,11 @@ class TicketCard extends StatelessWidget {
                       color: SoftUiTheme.redDanger.withValues(alpha: 0.3),
                     ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 9,
+                      horizontal: 10,
+                      vertical: 8,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),

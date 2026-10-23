@@ -49,7 +49,11 @@ class AiAdvisorCard extends StatelessWidget {
             children: [
               const Row(
                 children: [
-                  Text('🤖', style: TextStyle(fontSize: 20)),
+                  Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Color(0xFF9333EA),
+                    size: 20,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Gemini AI Wait Advisor',
@@ -87,6 +91,7 @@ class AiAdvisorCard extends StatelessWidget {
           // Service Dropdown
           if (services.isNotEmpty) ...[
             DropdownButtonFormField<String>(
+              isExpanded: true,
               initialValue: selectedServiceId ?? services.first.id,
               decoration: InputDecoration(
                 labelText: 'Select Service to Analyze',
@@ -125,7 +130,11 @@ class AiAdvisorCard extends StatelessWidget {
               items: services.map((s) {
                 return DropdownMenuItem<String>(
                   value: s.id,
-                  child: Text('${s.name} (~${s.baselineDurationMinutes}m)'),
+                  child: Text(
+                    '${s.name} (~${s.baselineDurationMinutes}m)',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 );
               }).toList(),
               onChanged: onServiceSelected,
@@ -250,13 +259,23 @@ class AiAdvisorCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '💡 Actionable MSME Advice:',
-                    style: TextStyle(
-                      color: Color(0xFF7E22CE),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.lightbulb_outline_rounded,
+                        color: Color(0xFF7E22CE),
+                        size: 16,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'Actionable MSME Advice:',
+                        style: TextStyle(
+                          color: Color(0xFF7E22CE),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 4),
                   Text(

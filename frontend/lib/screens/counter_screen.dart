@@ -1,19 +1,21 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../config/soft_ui_theme.dart';
-import '../models/queue_ticket.dart';
-import '../models/queue_summary.dart';
-import '../models/service_model.dart';
 import '../models/ai_prediction.dart';
 import '../models/analytics_overview.dart';
+import '../models/queue_summary.dart';
+import '../models/queue_ticket.dart';
+import '../models/service_model.dart';
 import '../services/api_service.dart';
-import '../services/sse_service.dart';
 import '../services/sound_haptics_service.dart';
-import '../widgets/ticket_card.dart';
+import '../services/sse_service.dart';
 import '../widgets/ai_advisor_card.dart';
-import '../widgets/walkin_ticket_dialog.dart';
 import '../widgets/override_wait_dialog.dart';
+import '../widgets/ticket_card.dart';
 import '../widgets/ticket_qr_dialog.dart';
+import '../widgets/walkin_ticket_dialog.dart';
 
 class CounterScreen extends StatefulWidget {
   final ValueChanged<String>? onOpenBuzzer;
@@ -57,8 +59,12 @@ class _CounterScreenState extends State<CounterScreen> {
         _refreshQueueSilently();
       },
       onStateChange: (state) {
-        if (state == StreamConnectionState.disconnected && _pollingTimer == null) {
-          _pollingTimer = Timer.periodic(const Duration(seconds: 4), (_) => _refreshQueueSilently());
+        if (state == StreamConnectionState.disconnected &&
+            _pollingTimer == null) {
+          _pollingTimer = Timer.periodic(
+            const Duration(seconds: 4),
+            (_) => _refreshQueueSilently(),
+          );
         }
       },
     );
@@ -139,7 +145,21 @@ class _CounterScreenState extends State<CounterScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('📢 Called Ticket #${called.ticketNumber} (${called.customerName})!'),
+            content: Row(
+              children: [
+                const Icon(
+                  Icons.campaign_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Called Ticket #${called.ticketNumber} (${called.customerName})!',
+                  ),
+                ),
+              ],
+            ),
             backgroundColor: const Color(0xFF10B981),
           ),
         );
@@ -187,14 +207,21 @@ class _CounterScreenState extends State<CounterScreen> {
     final isMobile = screenWidth < 600;
 
     final totalActive = _summary?.totalActive ?? _activeTickets.length;
-    final waitingCount = _summary?.waitingCount ?? _activeTickets.where((t) => t.isWaiting || t.isAlmostNext).length;
-    final servingCount = _summary?.servingCount ?? _activeTickets.where((t) => t.isNowServing).length;
+    final waitingCount =
+        _summary?.waitingCount ??
+        _activeTickets.where((t) => t.isWaiting || t.isAlmostNext).length;
+    final servingCount =
+        _summary?.servingCount ??
+        _activeTickets.where((t) => t.isNowServing).length;
     final revenue = _analyticsOverview?.totalRevenuePhp ?? 0.0;
 
     return RefreshIndicator(
       onRefresh: _loadAllData,
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: isMobile ? 14 : 20, vertical: isMobile ? 14 : 20),
+        padding: EdgeInsets.symmetric(
+          horizontal: isMobile ? 14 : 20,
+          vertical: isMobile ? 14 : 20,
+        ),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1300),
@@ -203,19 +230,35 @@ class _CounterScreenState extends State<CounterScreen> {
               children: [
                 // Header Bar (Responsive for Phones)
                 if (isMobile) ...[
-                  const Text(
-                    '🏪 Merchant Counter',
-                    style: TextStyle(
-                      color: SoftUiTheme.textPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.5,
-                    ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.storefront_rounded,
+                        color: SoftUiTheme.primaryMint,
+                        size: 22,
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Merchant Counter',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: SoftUiTheme.textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 2),
                   const Text(
                     'Cashier desk and active queue coordinator',
-                    style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12),
+                    style: TextStyle(
+                      color: SoftUiTheme.textSecondary,
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -229,7 +272,9 @@ class _CounterScreenState extends State<CounterScreen> {
                         backgroundColor: SoftUiTheme.primaryMint,
                         foregroundColor: Colors.white,
                         elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
                     ),
                   ),
@@ -240,19 +285,28 @@ class _CounterScreenState extends State<CounterScreen> {
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '🏪 Merchant Counter',
-                            style: TextStyle(
-                              color: SoftUiTheme.textPrimary,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.5,
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.storefront_rounded, color: SoftUiTheme.primaryMint, size: 26),
+                              SizedBox(width: 8),
+                              Text(
+                                'Merchant Counter',
+                                style: TextStyle(
+                                  color: SoftUiTheme.textPrimary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 2),
                           Text(
                             'Cashier desk and active queue coordinator',
-                            style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 13),
+                            style: TextStyle(
+                              color: SoftUiTheme.textSecondary,
+                              fontSize: 13,
+                            ),
                           ),
                         ],
                       ),
@@ -264,8 +318,13 @@ class _CounterScreenState extends State<CounterScreen> {
                           backgroundColor: SoftUiTheme.primaryMint,
                           foregroundColor: Colors.white,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                           shadowColor: Colors.transparent,
                         ),
                       ),
@@ -290,10 +349,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 65,
-                        child: _buildQueueListSection(),
-                      ),
+                      Expanded(flex: 65, child: _buildQueueListSection()),
                       const SizedBox(width: 20),
                       Expanded(
                         flex: 35,
@@ -347,7 +403,9 @@ class _CounterScreenState extends State<CounterScreen> {
       _refreshQueueSilently();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Issued Ticket #${created.ticketNumber} for ${created.customerName}!'),
+          content: Text(
+            'Issued Ticket #${created.ticketNumber} for ${created.customerName}!',
+          ),
           backgroundColor: SoftUiTheme.primaryMint,
         ),
       );
@@ -365,10 +423,30 @@ class _CounterScreenState extends State<CounterScreen> {
           spacing: 12,
           runSpacing: 12,
           children: [
-            _buildKpiCard('ACTIVE QUEUE', '$active', const Color(0xFF2563EB), cardWidth),
-            _buildKpiCard('WAITING', '$waiting', SoftUiTheme.amberWarning, cardWidth),
-            _buildKpiCard('NOW SERVING', '$serving', SoftUiTheme.primaryMint, cardWidth),
-            _buildKpiCard('TODAY\'S SALES', '₱${revenue.toStringAsFixed(0)}', const Color(0xFF9333EA), cardWidth),
+            _buildKpiCard(
+              'ACTIVE QUEUE',
+              '$active',
+              const Color(0xFF2563EB),
+              cardWidth,
+            ),
+            _buildKpiCard(
+              'WAITING',
+              '$waiting',
+              SoftUiTheme.amberWarning,
+              cardWidth,
+            ),
+            _buildKpiCard(
+              'NOW SERVING',
+              '$serving',
+              SoftUiTheme.primaryMint,
+              cardWidth,
+            ),
+            _buildKpiCard(
+              'TODAY\'S SALES',
+              '₱${revenue.toStringAsFixed(0)}',
+              const Color(0xFF9333EA),
+              cardWidth,
+            ),
           ],
         );
       },
@@ -441,7 +519,7 @@ class _CounterScreenState extends State<CounterScreen> {
               children: [
                 const Row(
                   children: [
-                    Text('⚡', style: TextStyle(fontSize: 20)),
+                    Icon(Icons.flash_on_rounded, color: Colors.white, size: 22),
                     SizedBox(width: 8),
                     Text(
                       'Ready to serve next?',
@@ -469,23 +547,34 @@ class _CounterScreenState extends State<CounterScreen> {
                   width: double.infinity,
                   height: 48,
                   child: ElevatedButton.icon(
-                    onPressed: waitingCount > 0 && !_isCallingNext ? _handleCallNext : null,
+                    onPressed: waitingCount > 0 && !_isCallingNext
+                        ? _handleCallNext
+                        : null,
                     icon: _isCallingNext
                         ? const SizedBox(
                             width: 18,
                             height: 18,
-                            child: CircularProgressIndicator(color: SoftUiTheme.mintDark, strokeWidth: 2),
+                            child: CircularProgressIndicator(
+                              color: SoftUiTheme.mintDark,
+                              strokeWidth: 2,
+                            ),
                           )
                         : const Icon(Icons.campaign_rounded, size: 20),
                     label: const Text(
                       'CALL NEXT TICKET',
-                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13,
+                        letterSpacing: 0.5,
+                      ),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: SoftUiTheme.mintDark,
                       elevation: 2,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -501,7 +590,11 @@ class _CounterScreenState extends State<CounterScreen> {
                 children: [
                   const Row(
                     children: [
-                      Text('⚡', style: TextStyle(fontSize: 22)),
+                      Icon(
+                        Icons.flash_on_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         'Ready to serve next customer?',
@@ -527,24 +620,38 @@ class _CounterScreenState extends State<CounterScreen> {
                 ],
               ),
               ElevatedButton.icon(
-                onPressed: waitingCount > 0 && !_isCallingNext ? _handleCallNext : null,
+                onPressed: waitingCount > 0 && !_isCallingNext
+                    ? _handleCallNext
+                    : null,
                 icon: _isCallingNext
                     ? const SizedBox(
                         width: 18,
                         height: 18,
-                        child: CircularProgressIndicator(color: SoftUiTheme.mintDark, strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                          color: SoftUiTheme.mintDark,
+                          strokeWidth: 2,
+                        ),
                       )
                     : const Icon(Icons.campaign_rounded, size: 20),
                 label: const Text(
                   'CALL NEXT TICKET',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, letterSpacing: 0.5),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                    letterSpacing: 0.5,
+                  ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: SoftUiTheme.mintDark,
                   elevation: 2,
-                  padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 22,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
               ),
             ],
@@ -571,19 +678,26 @@ class _CounterScreenState extends State<CounterScreen> {
             children: [
               Row(
                 children: [
-                  const Text('📋', style: TextStyle(fontSize: 18)),
+                  const Icon(
+                    Icons.list_alt_rounded,
+                    color: SoftUiTheme.primaryMint,
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   const Text(
                     'Active Queue Line',
                     style: TextStyle(
                       color: SoftUiTheme.textPrimary,
-                      fontSize: 17,
+                      fontSize: 12,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(12),
@@ -605,7 +719,10 @@ class _CounterScreenState extends State<CounterScreen> {
                 label: const Text('Refresh'),
                 style: TextButton.styleFrom(
                   foregroundColor: SoftUiTheme.textSecondary,
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                 ),
               ),
             ],
@@ -618,7 +735,11 @@ class _CounterScreenState extends State<CounterScreen> {
               alignment: Alignment.center,
               child: const Column(
                 children: [
-                  Text('🎉', style: TextStyle(fontSize: 32)),
+                  Icon(
+                    Icons.task_alt_rounded,
+                    color: SoftUiTheme.primaryMint,
+                    size: 40,
+                  ),
                   SizedBox(height: 8),
                   Text(
                     'All caught up! No active tickets in queue.',
@@ -668,7 +789,8 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   Widget _buildOperationsSummaryCard() {
-    final avgWait = (_analyticsOverview?.averageDurationMinutes ?? 15).toDouble();
+    final avgWait = (_analyticsOverview?.averageDurationMinutes ?? 15)
+        .toDouble();
     final totalCompleted = _analyticsOverview?.completedTicketsCount ?? 0;
 
     return Container(
@@ -684,7 +806,11 @@ class _CounterScreenState extends State<CounterScreen> {
         children: [
           const Row(
             children: [
-              Text('📊', style: TextStyle(fontSize: 16)),
+              Icon(
+                Icons.bar_chart_rounded,
+                color: SoftUiTheme.primaryMint,
+                size: 20,
+              ),
               SizedBox(width: 8),
               Text(
                 'Shift Operations Metrics',
@@ -700,16 +826,42 @@ class _CounterScreenState extends State<CounterScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Avg Turnaround Time', style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12.5)),
-              Text('${avgWait.toStringAsFixed(1)} mins', style: const TextStyle(fontWeight: FontWeight.w800, color: SoftUiTheme.textPrimary, fontSize: 13)),
+              const Text(
+                'Avg Turnaround Time',
+                style: TextStyle(
+                  color: SoftUiTheme.textSecondary,
+                  fontSize: 12.5,
+                ),
+              ),
+              Text(
+                '${avgWait.toStringAsFixed(1)} mins',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: SoftUiTheme.textPrimary,
+                  fontSize: 13,
+                ),
+              ),
             ],
           ),
           const Divider(height: 16, color: Color(0xFFF1F5F9)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Total Customers Served', style: TextStyle(color: SoftUiTheme.textSecondary, fontSize: 12.5)),
-              Text('$totalCompleted', style: const TextStyle(fontWeight: FontWeight.w800, color: SoftUiTheme.primaryMint, fontSize: 13)),
+              const Text(
+                'Total Customers Served',
+                style: TextStyle(
+                  color: SoftUiTheme.textSecondary,
+                  fontSize: 12.5,
+                ),
+              ),
+              Text(
+                '$totalCompleted',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: SoftUiTheme.primaryMint,
+                  fontSize: 13,
+                ),
+              ),
             ],
           ),
         ],

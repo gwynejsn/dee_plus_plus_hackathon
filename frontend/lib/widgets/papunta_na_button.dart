@@ -32,7 +32,7 @@ class PapuntaNaButton extends StatelessWidget {
             Icon(Icons.check_circle_rounded, color: SoftUiTheme.primaryMint, size: 24),
             SizedBox(width: 10),
             Text(
-              '✓ Shop Notified: Papunta Ka Na!',
+              'Shop Notified: Papunta Ka Na!',
               style: TextStyle(
                 color: SoftUiTheme.primaryMint,
                 fontSize: 16,
@@ -105,7 +105,11 @@ class PapuntaNaButton extends StatelessWidget {
               : const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('🚶', style: TextStyle(fontSize: 22)),
+                    Icon(
+                      Icons.directions_walk_rounded,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                     SizedBox(width: 10),
                     Text(
                       'PAPUNTA NA AKO (On My Way)',

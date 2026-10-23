@@ -72,13 +72,25 @@ class _ServicesScreenState extends State<ServicesScreen> {
           ),
           shadowColor: const Color(0x3312263F),
           elevation: 20,
-          title: Text(
-            existing == null ? '➕ Add Service Offering' : '✏️ Edit Service',
-            style: const TextStyle(
-              color: SoftUiTheme.textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-            ),
+          title: Row(
+            children: [
+              Icon(
+                existing == null
+                    ? Icons.add_circle_outline_rounded
+                    : Icons.edit_rounded,
+                color: SoftUiTheme.primaryMint,
+                size: 22,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                existing == null ? 'Add Service Offering' : 'Edit Service',
+                style: const TextStyle(
+                  color: SoftUiTheme.textPrimary,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -314,14 +326,27 @@ class _ServicesScreenState extends State<ServicesScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isMobile) ...[
-                const Text(
-                  '📋 Service Catalog',
-                  style: TextStyle(
-                    color: SoftUiTheme.textPrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -0.5,
-                  ),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.list_alt_rounded,
+                      color: SoftUiTheme.primaryMint,
+                      size: 22,
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Service Catalog',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: SoftUiTheme.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 2),
                 const Text(
@@ -357,14 +382,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '📋 Service Catalog',
-                            style: TextStyle(
-                              color: SoftUiTheme.textPrimary,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.5,
-                            ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.list_alt_rounded,
+                                color: SoftUiTheme.primaryMint,
+                                size: 26,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'Service Catalog',
+                                style: TextStyle(
+                                  color: SoftUiTheme.textPrimary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 2),
                           Text(
@@ -435,7 +470,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     final s = _services[i];
                     return Container(
                       margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(18),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 12 : 18,
+                        vertical: isMobile ? 12 : 16,
+                      ),
                       decoration: BoxDecoration(
                         color: SoftUiTheme.cardBg,
                         borderRadius: SoftUiTheme.cardRadius,
@@ -445,77 +483,92 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       child: Row(
                         children: [
                           Container(
-                            width: 48,
-                            height: 48,
+                            width: isMobile ? 40 : 48,
+                            height: isMobile ? 40 : 48,
                             decoration: BoxDecoration(
                               color: SoftUiTheme.mintLight,
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(isMobile ? 11 : 14),
                             ),
                             alignment: Alignment.center,
-                            child: const Text(
-                              '🏷️',
-                              style: TextStyle(fontSize: 22),
+                            child: Icon(
+                              Icons.local_offer_rounded,
+                              color: SoftUiTheme.primaryMint,
+                              size: isMobile ? 19 : 22,
                             ),
                           ),
-                          const SizedBox(width: 14),
+                          SizedBox(width: isMobile ? 10 : 14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      s.name,
-                                      style: const TextStyle(
-                                        color: SoftUiTheme.textPrimary,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 3,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF1F5F9),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        s.category,
-                                        style: const TextStyle(
-                                          color: SoftUiTheme.textSecondary,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  s.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: SoftUiTheme.textPrimary,
+                                    fontSize: isMobile ? 14.5 : 16,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
-                                  '₱${s.unitPrice.toStringAsFixed(0)} • Baseline: ${s.baselineDurationMinutes} mins',
-                                  style: const TextStyle(
-                                    color: SoftUiTheme.primaryMint,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w800,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '₱${s.unitPrice.toStringAsFixed(0)} • ${s.baselineDurationMinutes} mins',
+                                        style: const TextStyle(
+                                          color: SoftUiTheme.primaryMint,
+                                          fontSize: 11.5,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFF1F5F9),
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          s.category,
+                                          style: const TextStyle(
+                                            color: SoftUiTheme.textSecondary,
+                                            fontSize: 9.5,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
                             icon: const Icon(
                               Icons.edit_outlined,
+                              size: 19,
                               color: SoftUiTheme.textSecondary,
                             ),
                             onPressed: () => _showAddEditDialog(s),
                             tooltip: 'Edit Service',
                           ),
                           IconButton(
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(minWidth: 34, minHeight: 34),
                             icon: const Icon(
                               Icons.delete_outline,
+                              size: 19,
                               color: SoftUiTheme.redDanger,
                             ),
                             onPressed: () async {

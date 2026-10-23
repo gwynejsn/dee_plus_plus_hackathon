@@ -17,7 +17,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(72);
+  Size get preferredSize => const Size.fromHeight(64);
 
   void _showEnvironmentDialog(BuildContext context) {
     final customUrlController = TextEditingController(text: ApiConfig.baseUrl);
@@ -268,11 +268,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 850;
+    final isVerySmall = screenWidth < 380;
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 14 : 20,
-        vertical: isMobile ? 8 : 10,
+        horizontal: isMobile ? 12 : 20,
+        vertical: 8,
       ),
       decoration: const BoxDecoration(
         color: SoftUiTheme.cardBg,
@@ -298,15 +299,15 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: isMobile ? 36 : 42,
-                    height: isMobile ? 36 : 42,
+                    width: isMobile ? 32 : 40,
+                    height: isMobile ? 32 : 40,
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFF00E5AB), Color(0xFF00D19E)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(isMobile ? 11 : 14),
+                      borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
                       boxShadow: SoftUiTheme.buttonShadow,
                     ),
                     alignment: Alignment.center,
@@ -315,78 +316,58 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
-                        fontSize: isMobile ? 19 : 22,
+                        fontSize: isMobile ? 18 : 22,
                         letterSpacing: -0.5,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'NextNa',
-                            style: TextStyle(
-                              color: SoftUiTheme.textPrimary,
-                              fontSize: isMobile ? 16 : 18,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: SoftUiTheme.mintLight,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: SoftUiTheme.primaryMint.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              'MSME PILA',
-                              style: TextStyle(
-                                color: SoftUiTheme.mintDark,
-                                fontSize: 8.5,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                        ],
+                  const SizedBox(width: 8),
+                  Text(
+                    'NextNa',
+                    style: TextStyle(
+                      color: SoftUiTheme.textPrimary,
+                      fontSize: isMobile ? 16 : 18,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  if (!isVerySmall) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
                       ),
-                      if (!isMobile) ...[
-                        const SizedBox(height: 2),
-                        const Text(
-                          'Smart Queue & Virtual Buzzer',
-                          style: TextStyle(
-                            color: SoftUiTheme.textSecondary,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w500,
+                      decoration: BoxDecoration(
+                        color: SoftUiTheme.mintLight,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: SoftUiTheme.primaryMint.withValues(
+                            alpha: 0.3,
                           ),
                         ),
-                      ],
-                    ],
-                  ),
+                      ),
+                      child: const Text(
+                        'PILA',
+                        style: TextStyle(
+                          color: SoftUiTheme.mintDark,
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
 
             const Spacer(),
 
-            // Desktop Navigation Tabs (Hidden on mobile phones; mobile uses bottom navigation bar)
+            // Desktop Navigation Tabs (Hidden on mobile phones)
             if (!isMobile) ...[
               Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(20),
@@ -401,14 +382,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildNavTab(0, '📱', 'Buzzer', selectedIndex == 0),
-                    _buildNavTab(1, '🏪', 'Counter', selectedIndex == 1),
-                    _buildNavTab(2, '📺', 'Display', selectedIndex == 2),
-                    _buildNavTab(3, '📋', 'Services', selectedIndex == 3),
+                    _buildNavTab(0, Icons.phone_android_rounded, 'Buzzer', selectedIndex == 0),
+                    _buildNavTab(1, Icons.storefront_rounded, 'Counter', selectedIndex == 1),
+                    _buildNavTab(2, Icons.tv_rounded, 'Display', selectedIndex == 2),
+                    _buildNavTab(3, Icons.list_alt_rounded, 'Services', selectedIndex == 3),
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 10),
             ],
 
             // Sound Toggle Button
@@ -416,8 +397,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               valueListenable: SoundHapticsService().soundEnabledNotifier,
               builder: (ctx, soundEnabled, _) {
                 return Container(
-                  width: isMobile ? 36 : 40,
-                  height: isMobile ? 36 : 40,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: soundEnabled
                         ? SoftUiTheme.mintLight
@@ -433,7 +414,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       color: soundEnabled
                           ? SoftUiTheme.mintDark
                           : SoftUiTheme.textSecondary,
-                      size: isMobile ? 18 : 19,
+                      size: 16,
                     ),
                     tooltip: soundEnabled ? 'Mute Chimes' : 'Unmute Chimes',
                     onPressed: () => SoundHapticsService().toggleSound(),
@@ -442,7 +423,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               },
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
 
             // Environment Switcher / Status Pill
             ValueListenableBuilder<String>(
@@ -454,8 +435,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: isMobile ? 8 : 12,
-                      vertical: isMobile ? 6 : 7,
+                      horizontal: isMobile ? 8 : 10,
+                      vertical: 5,
                     ),
                     decoration: BoxDecoration(
                       color: SoftUiTheme.cardBg,
@@ -475,8 +456,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 7,
+                          height: 7,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: isBackendOnline
@@ -493,13 +474,13 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                             ],
                           ),
                         ),
-                        if (!isMobile) ...[
-                          const SizedBox(width: 8),
+                        if (!isVerySmall) ...[
+                          const SizedBox(width: 5),
                           Text(
-                            isLocal ? 'Localhost' : 'Live Cloud',
+                            isLocal ? 'Local' : 'Live',
                             style: const TextStyle(
                               color: SoftUiTheme.textPrimary,
-                              fontSize: 11,
+                              fontSize: 10.5,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -516,13 +497,13 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildNavTab(int index, String icon, String label, bool isSelected) {
+  Widget _buildNavTab(int index, IconData icon, String label, bool isSelected) {
     return InkWell(
       onTap: () => onTabSelected(index),
       borderRadius: BorderRadius.circular(16),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? SoftUiTheme.cardBg : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
@@ -539,15 +520,19 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 14)),
-            const SizedBox(width: 6),
+            Icon(
+              icon,
+              size: 15,
+              color: isSelected ? SoftUiTheme.mintDark : SoftUiTheme.textSecondary,
+            ),
+            const SizedBox(width: 5),
             Text(
               label,
               style: TextStyle(
                 color: isSelected
                     ? SoftUiTheme.textPrimary
                     : SoftUiTheme.textSecondary,
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               ),
             ),

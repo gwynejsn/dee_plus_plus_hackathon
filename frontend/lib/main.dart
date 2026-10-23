@@ -150,14 +150,13 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildBottomNavItem(0, Icons.phone_android_rounded, 'Buzzer'),
-              _buildBottomNavItem(1, Icons.storefront_rounded, 'Counter'),
-              _buildBottomNavItem(2, Icons.tv_rounded, 'Display'),
-              _buildBottomNavItem(3, Icons.list_alt_rounded, 'Services'),
+              Expanded(child: _buildBottomNavItem(0, Icons.phone_android_rounded, 'Buzzer')),
+              Expanded(child: _buildBottomNavItem(1, Icons.storefront_rounded, 'Counter')),
+              Expanded(child: _buildBottomNavItem(2, Icons.tv_rounded, 'Display')),
+              Expanded(child: _buildBottomNavItem(3, Icons.list_alt_rounded, 'Services')),
             ],
           ),
         ),
@@ -170,28 +169,30 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
 
     return InkWell(
       onTap: () => _onTabSelected(index),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(12),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6),
         decoration: BoxDecoration(
           color: isSelected ? SoftUiTheme.mintLight : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 22,
+              size: 20,
               color: isSelected ? SoftUiTheme.mintDark : SoftUiTheme.textSecondary,
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: isSelected ? SoftUiTheme.mintDark : SoftUiTheme.textSecondary,
-                fontSize: 11,
+                fontSize: 10.5,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               ),
             ),

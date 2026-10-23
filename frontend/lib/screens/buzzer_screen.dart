@@ -165,8 +165,20 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              '🚶 Confirmed! Merchant has been notified you are on your way.',
+            content: Row(
+              children: [
+                Icon(
+                  Icons.directions_walk_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Confirmed! Merchant has been notified you are on your way.',
+                  ),
+                ),
+              ],
             ),
             backgroundColor: Color(0xFF00D19E),
           ),
@@ -452,14 +464,14 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
     Color bg;
     Color border;
     Color text;
-    String icon;
+    IconData icon;
     String message;
 
     if (t.isNowServing) {
       bg = SoftUiTheme.mintLight;
       border = SoftUiTheme.primaryMint;
       text = SoftUiTheme.mintDark;
-      icon = '🔔';
+      icon = Icons.notifications_active_rounded;
       message =
           t.alertMessage ??
           'Your turn now! Please proceed to the service counter.';
@@ -467,7 +479,7 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
       bg = SoftUiTheme.amberLight;
       border = SoftUiTheme.amberWarning;
       text = const Color(0xFFB45309);
-      icon = '🚶';
+      icon = Icons.directions_walk_rounded;
       message =
           t.alertMessage ??
           'Almost your turn! Please start heading back to the shop.';
@@ -475,13 +487,13 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
       bg = const Color(0xFFF1F5F9);
       border = const Color(0xFFCBD5E1);
       text = SoftUiTheme.textSecondary;
-      icon = '✓';
+      icon = Icons.check_circle_outline_rounded;
       message = 'Service completed. Maraming salamat sa pagbisita!';
     } else {
       bg = const Color(0xFFEFF6FF);
       border = const Color(0xFF93C5FD);
       text = const Color(0xFF1D4ED8);
-      icon = '⏳';
+      icon = Icons.hourglass_top_rounded;
       message =
           t.alertMessage ??
           'You are #${t.ticketNumber} in line. Relax while you wait!';
@@ -504,7 +516,7 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
       ),
       child: Row(
         children: [
-          Text(icon, style: const TextStyle(fontSize: 20)),
+          Icon(icon, color: text, size: 22),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -541,11 +553,16 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
+                    Icon(
+                      Icons.phone_android_rounded,
+                      color: SoftUiTheme.primaryMint,
+                      size: 20,
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
                       child: Text(
-                        '📱 Virtual Buzzer Portal',
+                        'Virtual Buzzer Portal',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: SoftUiTheme.textPrimary,
@@ -712,28 +729,34 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
                             mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '#${t.ticketNumber}',
-                                    style: const TextStyle(
-                                      color: SoftUiTheme.textPrimary,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w900,
-                                      fontFamily: 'monospace',
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '#${t.ticketNumber}',
+                                      style: const TextStyle(
+                                        color: SoftUiTheme.textPrimary,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w900,
+                                        fontFamily: 'monospace',
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    t.customerName,
-                                    style: const TextStyle(
-                                      color: SoftUiTheme.textPrimary,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        t.customerName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: SoftUiTheme.textPrimary,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
+                              const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
@@ -796,11 +819,25 @@ class _BuzzerScreenState extends State<BuzzerScreen> {
                               strokeWidth: 2,
                             ),
                           )
-                        : const Text(
-                            '⚡ Issue 1-Click Test Ticket (Demo)',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 13,
+                        : const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.flash_on_rounded,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  'Issue 1-Click Test Ticket (Demo)',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                   ),
