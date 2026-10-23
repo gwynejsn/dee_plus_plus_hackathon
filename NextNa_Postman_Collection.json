@@ -286,6 +286,57 @@
           }
         }
       ]
+    },
+    {
+      "name": "4. Real-Time Virtual Buzzer & Notifications",
+      "item": [
+        {
+          "name": "Virtual Buzzer Stream (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/buzzer/{{ticketId}}/stream",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "buzzer", "{{ticketId}}", "stream"]
+            }
+          }
+        },
+        {
+          "name": "Display Board Stream (SSE)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/display/stream",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "display", "stream"]
+            }
+          }
+        },
+        {
+          "name": "Streaming Connections Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "status"]
+            }
+          }
+        }
+      ]
     }
   ]
 }
